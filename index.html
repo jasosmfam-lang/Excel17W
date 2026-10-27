@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Excel 17W Volleyball</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0f2447;
+    --navy-deep:#091731;
+    --red:#c8102e;
+    --ink:#16213a;
+    --mist:#e9f0fc;
+    --corn:#6495ed;
+    --corn-deep:#3f6fd1;
+    --line:#d4dce8;
+    --white:#fff;
+    --display:'Big Shoulders Display','Arial Narrow',Impact,sans-serif;
+    --body:'Figtree',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:var(--body);color:var(--ink);background:var(--white);line-height:1.55;font-size:17px}
+  a{color:inherit}
+  :focus-visible{outline:3px solid var(--red);outline-offset:3px}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+  /* announcement banner */
+  .banner{background:var(--red);color:#fff;font-weight:600;text-align:center;padding:10px 20px;font-size:.95rem}
+  .banner[hidden]{display:none}
+
+  /* hero: court lines are the visual motif */
+  .hero{position:relative;background:var(--navy);color:#fff;overflow:hidden;padding:56px 0 64px}
+  .hero::before,.hero::after{content:"";position:absolute;left:0;right:0;height:3px;background:var(--corn);opacity:.75}
+  .hero::before{top:34%}
+  .hero::after{bottom:0;height:6px;background:var(--red)}
+  .hero-grid{position:relative;display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:end}
+  .hero h1{font-family:var(--display);font-weight:900;font-size:clamp(3.6rem,10vw,7rem);line-height:.88;margin:0 0 14px;letter-spacing:.005em}
+  .hero p.tag{margin:0;font-size:1.1rem;max-width:30ch;color:#cfdcf5}
+  .next{background:var(--white);color:var(--ink);padding:22px 24px;border-left:8px solid var(--red)}
+  .next h2{font-family:var(--display);font-size:1rem;font-weight:800;margin:0 0 6px;color:var(--red);letter-spacing:.04em}
+  .next .name{font-family:var(--display);font-weight:800;font-size:2rem;line-height:1.05;margin:0}
+  .next .meta{margin:6px 0 14px;color:#4a5875}
+  .btns{display:flex;flex-wrap:wrap;gap:8px}
+  .btn{display:inline-block;padding:9px 16px;font-weight:700;font-size:.92rem;text-decoration:none;border:2px solid var(--navy);color:var(--navy);background:transparent;border-radius:3px}
+  .btn:hover{background:var(--navy);color:#fff}
+  .btn.solid{background:var(--navy);color:#fff}
+  .btn.solid:hover{background:var(--red);border-color:var(--red)}
+  .btn.off{border-color:var(--line);color:#8c97ad;pointer-events:none}
+
+  section{padding:52px 0}
+  section h2.sec{font-family:var(--display);font-weight:900;font-size:2.4rem;margin:0 0 8px;color:var(--navy);line-height:1;padding-bottom:8px;border-bottom:4px solid var(--corn);display:inline-block}
+  section h2.sec + .sub{margin-top:14px}
+  .sub{margin:0 0 24px;color:#4a5875;max-width:60ch}
+  .alt{background:var(--mist)}
+
+  /* schedule */
+  .events{list-style:none;margin:0;padding:0;border-top:2px solid var(--navy)}
+  .ev{display:grid;grid-template-columns:110px 1fr auto;gap:20px;align-items:center;padding:16px 0;border-bottom:1px solid var(--line)}
+  .ev .date{font-family:var(--display);font-weight:800;font-size:1.5rem;line-height:1;color:var(--navy)}
+  .ev .date small{display:block;font-family:var(--body);font-weight:600;font-size:.8rem;color:#6b7893;margin-top:4px}
+  .ev h3{margin:0;font-size:1.1rem}
+  .ev .where{color:#4a5875;font-size:.95rem}
+  .pill{display:inline-block;font-size:.75rem;font-weight:700;padding:2px 8px;border-radius:99px;margin-left:8px;vertical-align:middle;background:var(--corn);color:var(--navy-deep)}
+  .pill.travel{background:var(--red);color:#fff}
+  .notice{background:#fff7e0;border:1px solid #ecd48a;padding:10px 14px;margin:0 0 16px;font-size:.92rem}
+
+  /* calendar */
+  .cal-wrap{border:2px solid var(--navy);background:#fff}
+  .cal-wrap iframe{display:block;width:100%;height:640px;border:0}
+  .cal-empty{padding:40px 24px;text-align:center;color:#4a5875}
+  .subscribe{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 18px}
+
+  /* quick links */
+  .links{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+  .link{display:block;text-decoration:none;background:#fff;padding:18px 20px;border:2px solid var(--navy);border-top:8px solid var(--corn);border-radius:3px}
+  .link:hover{background:var(--navy);color:#fff}
+  .link strong{display:block;font-family:var(--display);font-size:1.45rem;font-weight:800;line-height:1.05}
+  .link span{font-size:.9rem;opacity:.8}
+  .link.off{border-color:var(--line);color:#8c97ad;pointer-events:none}
+
+  /* contacts */
+  .people{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+  .person{border-top:4px solid var(--corn);padding-top:10px}
+  .person b{display:block;font-size:1.05rem}
+  .person .role{color:#6b7893;font-size:.9rem}
+  .person a{font-size:.95rem}
+
+  footer{background:var(--navy-deep);color:#9fb0cf;padding:26px 0;font-size:.9rem;border-top:6px solid var(--corn)}
+
+  @media(max-width:760px){
+    .hero-grid{grid-template-columns:1fr;gap:28px}
+    .ev{grid-template-columns:1fr;gap:6px}
+    .cal-wrap iframe{height:520px}
+  }
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<div class="banner" id="banner" hidden></div>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <h1 id="teamName">Excel 17W</h1>
+      <p class="tag" id="teamTag">Club volleyball, 2026&ndash;27 season</p>
+    </div>
+    <div class="next" id="next" aria-live="polite">
+      <h2>Next up</h2>
+      <p class="name">Loading schedule&hellip;</p>
+    </div>
+  </div>
+</header>
+
+<main>
+<section id="schedule">
+  <div class="wrap">
+    <h2 class="sec">Upcoming events</h2>
+    <p class="sub">Tap an event for hotel and restaurant info, team dinner details, scores, and the live stream.</p>
+    <div id="notice"></div>
+    <ul class="events" id="events"></ul>
+  </div>
+</section>
+
+<section id="links" class="alt">
+  <div class="wrap">
+    <h2 class="sec">Quick links</h2>
+    <p class="sub">Everything the team uses in one place.</p>
+    <div class="links" id="linkGrid"></div>
+  </div>
+</section>
+
+<section id="contacts">
+  <div class="wrap">
+    <h2 class="sec">Who to ask</h2>
+    <p class="sub">Questions about schedules, travel, or the team? Start here.</p>
+    <div class="people" id="people"></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap" id="foot"></div>
+</footer>
+
+<script>
+/* =====================================================================
+   SETTINGS: this is the only part you edit.
+   Anything still starting with YOUR_ is treated as "not set up yet".
+   ===================================================================== */
+const CONFIG = {
+  teamName: "Excel 17W",
+  tagline: "Club volleyball, 2026\u201327 season",
+  timezone: "America/Chicago",
+
+  // Optional banner at the top for last-minute changes. Leave "" to hide it.
+  announcement: "",
+
+  // Events sheet: File > Share > Publish to web > pick the Events tab > CSV
+  // Columns (row 1): name,start,end,city,venue,type,page,results,live
+  //   start/end like 2026-12-12   type = Local or Travel
+  //   page = link to that event's page   results = official scoring link   live = stream link
+  eventsCsvUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQzy7gqwkCqquh9XQ0FTJB4341FuWnkoQ2FtyDzRS24X7qEy0SOp3-unePR2AVwuIxAXo8aDi9R2Qz0/pub?gid=202820630&single=true&output=csv",
+
+  // Quick links. Put the real URL in each one. Leave as-is to show it greyed out.
+  links: [
+    { title: "Photos",        note: "Post and download team photos", url: "YOUR_PHOTOS_URL_HERE" },
+    { title: "Team cheat sheet", note: "Names, numbers, and parents",  url: "YOUR_CHEATSHEET_URL_HERE" },
+    { title: "Jersey plan",   note: "Who wears what, each day",       url: "YOUR_JERSEY_URL_HERE" },
+    { title: "Live scores",   note: "Official tournament scoring",    url: "YOUR_SCORES_URL_HERE" },
+    { title: "Watch live",    note: "Stream for family who can\u2019t be there", url: "YOUR_LIVE_URL_HERE" }
+  ],
+
+  // Contacts shown at the bottom. Add or remove rows as needed.
+  contacts: [
+    { name: "YOUR NAME", role: "Team manager", email: "you@example.com" },
+    { name: "Head coach", role: "Coach", email: "coach@example.com" }
+  ],
+
+  footer: "Excel Volleyball \u00b7 Questions? Email your team manager."
+};
+/* ===================================================================== */
+
+const isSet = v => v && !/^YOUR_/.test(v);
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const safeUrl = u => /^https?:\/\//i.test(u || "") ? u : "";
+
+document.title = CONFIG.teamName + " Volleyball";
+$("teamName").textContent = CONFIG.teamName;
+$("teamTag").textContent = CONFIG.tagline;
+$("foot").textContent = CONFIG.footer;
+if (CONFIG.announcement) { $("banner").textContent = CONFIG.announcement; $("banner").hidden = false; }
+
+/* ---------- date helpers (dates are plain yyyy-mm-dd, treated as local) ---------- */
+function parseDate(s){
+  const m = /^(\d{4})-(\d{1,2})-(\d{1,2})/.exec((s || "").trim());
+  return m ? new Date(+m[1], +m[2]-1, +m[3]) : null;
+}
+const MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const DOW = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+function rangeLabel(a, b){
+  if (!b || +a === +b) return MON[a.getMonth()] + " " + a.getDate();
+  if (a.getMonth() === b.getMonth()) return MON[a.getMonth()] + " " + a.getDate() + "\u2013" + b.getDate();
+  return MON[a.getMonth()] + " " + a.getDate() + " \u2013 " + MON[b.getMonth()] + " " + b.getDate();
+}
+function dowLabel(a, b){
+  if (!b || +a === +b) return DOW[a.getDay()];
+  return DOW[a.getDay()] + "\u2013" + DOW[b.getDay()];
+}
+
+/* ---------- CSV parsing (handles quoted commas) ---------- */
+function parseCsv(text){
+  const rows = []; let row = [], cur = "", q = false;
+  for (let i = 0; i < text.length; i++){
+    const c = text[i];
+    if (q){
+      if (c === '"' && text[i+1] === '"'){ cur += '"'; i++; }
+      else if (c === '"') q = false;
+      else cur += c;
+    } else if (c === '"') q = true;
+    else if (c === ","){ row.push(cur); cur = ""; }
+    else if (c === "\n" || c === "\r"){
+      if (c === "\r" && text[i+1] === "\n") i++;
+      row.push(cur); cur = "";
+      if (row.some(x => x.trim() !== "")) rows.push(row);
+      row = [];
+    } else cur += c;
+  }
+  row.push(cur);
+  if (row.some(x => x.trim() !== "")) rows.push(row);
+  return rows;
+}
+function rowsToEvents(rows){
+  if (!rows.length) return [];
+  const head = rows[0].map(h => h.trim().toLowerCase());
+  return rows.slice(1).map(r => {
+    const o = {}; head.forEach((h, i) => o[h] = (r[i] || "").trim()); return o;
+  }).filter(e => e.name && parseDate(e.start));
+}
+
+/* ---------- sample data so the page looks right before the sheet is connected ---------- */
+function sampleEvents(){
+  const d = n => { const t = new Date(); t.setDate(t.getDate() + n); return t.toISOString().slice(0,10); };
+  return [
+    { name:"Sample local tournament", start:d(12), end:d(13), city:"Dallas, TX", venue:"Replace with your venue", type:"Local", page:"", results:"", live:"" },
+    { name:"Sample travel tournament", start:d(40), end:d(42), city:"Kansas City, MO", venue:"Replace with your venue", type:"Travel", page:"", results:"", live:"" }
+  ];
+}
+
+/* ---------- render events + next-up panel ---------- */
+function btn(label, url, solid){
+  const u = safeUrl(url);
+  return u ? '<a class="btn' + (solid ? ' solid' : '') + '" href="' + esc(u) + '" target="_blank" rel="noopener">' + esc(label) + '</a>' : "";
+}
+function render(events, isSample){
+  const today = new Date(); today.setHours(0,0,0,0);
+  const up = events.map(e => ({...e, a: parseDate(e.start), b: parseDate(e.end) || parseDate(e.start)}))
+                   .filter(e => e.b >= today)
+                   .sort((x, y) => x.a - y.a);
+
+  $("notice").innerHTML = isSample
+    ? '<div class="notice">Showing sample events. Connect your events sheet in the settings to show the real schedule.</div>' : "";
+
+  if (!up.length){
+    $("events").innerHTML = '<li class="ev"><div></div><div><h3>No upcoming events posted yet</h3><div class="where">Check your team calendar invite.</div></div></li>';
+    $("next").innerHTML = '<h2>Next up</h2><p class="name">Nothing scheduled</p><p class="meta">Check your team calendar invite.</p>';
+    return;
+  }
+
+  const n = up[0];
+  const live = n.a <= today && n.b >= today;
+  $("next").innerHTML =
+    '<h2>' + (live ? 'This weekend' : 'Next up') + '</h2>' +
+    '<p class="name">' + esc(n.name) + '</p>' +
+    '<p class="meta">' + esc(rangeLabel(n.a, n.b)) + (n.city ? ' &middot; ' + esc(n.city) : '') + '</p>' +
+    '<div class="btns">' + btn("Event details", n.page, true) + btn("Live scores", n.results) + btn("Watch live", n.live) + '</div>';
+
+  $("events").innerHTML = up.map(e => {
+    const travel = /travel/i.test(e.type);
+    const where = [e.venue, e.city].filter(Boolean).join(", ");
+    return '<li class="ev">' +
+      '<div class="date">' + esc(rangeLabel(e.a, e.b)) + '<small>' + esc(dowLabel(e.a, e.b)) + '</small></div>' +
+      '<div><h3>' + esc(e.name) + '<span class="pill' + (travel ? ' travel' : '') + '">' + (travel ? 'Travel' : 'Local') + '</span></h3>' +
+      '<div class="where">' + esc(where) + '</div></div>' +
+      '<div class="btns">' + btn("Details", e.page, true) + btn("Scores", e.results) + btn("Live", e.live) + '</div></li>';
+  }).join("");
+}
+
+async function loadEvents(){
+  if (!isSet(CONFIG.eventsCsvUrl)) return render(sampleEvents(), true);
+  try{
+    const r = await fetch(CONFIG.eventsCsvUrl, { cache: "no-store" });
+    if (!r.ok) throw new Error(r.status);
+    render(rowsToEvents(parseCsv(await r.text())), false);
+  } catch(err){
+    $("notice").innerHTML = '<div class="notice">The schedule could not load right now. Check your team calendar invite for the latest.</div>';
+    $("events").innerHTML = ""; 
+    $("next").innerHTML = '<h2>Next up</h2><p class="name">See the calendar</p>';
+  }
+}
+
+/* ---------- quick links + contacts ---------- */
+$("linkGrid").innerHTML = CONFIG.links.map(l => {
+  const ok = isSet(l.url) && safeUrl(l.url);
+  return ok
+    ? '<a class="link" href="' + esc(l.url) + '" target="_blank" rel="noopener"><strong>' + esc(l.title) + '</strong><span>' + esc(l.note) + '</span></a>'
+    : '<div class="link off"><strong>' + esc(l.title) + '</strong><span>Coming soon</span></div>';
+}).join("");
+
+$("people").innerHTML = CONFIG.contacts.map(p =>
+  '<div class="person"><b>' + esc(p.name) + '</b><div class="role">' + esc(p.role) + '</div>' +
+  (p.email ? '<a href="mailto:' + esc(p.email) + '">' + esc(p.email) + '</a>' : '') + '</div>'
+).join("");
+
+loadEvents();
+</script>
+</body>
+</html>
