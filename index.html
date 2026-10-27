@@ -67,6 +67,11 @@
   .ev .where{color:#4a5875;font-size:.95rem}
   .pill{display:inline-block;font-size:.75rem;font-weight:700;padding:2px 8px;border-radius:99px;margin-left:8px;vertical-align:middle;background:var(--corn);color:var(--navy-deep)}
   .pill.travel{background:var(--red);color:#fff}
+  .more-btn{margin-top:16px;padding:10px 18px;font:inherit;font-weight:700;font-size:.92rem;cursor:pointer;background:#fff;color:var(--navy);border:2px solid var(--navy);border-radius:3px}
+  .more-btn:hover{background:var(--navy);color:#fff}
+  .events.extra{border-top:0}
+  .events.past .ev{opacity:.72}
+  .past-wrap{margin-top:34px}
   .notice{background:#fff7e0;border:1px solid #ecd48a;padding:10px 14px;margin:0 0 16px;font-size:.92rem}
 
   /* calendar */
@@ -124,6 +129,7 @@
     <p class="sub">Tap an event for hotel and restaurant info, team dinner details, scores, and the live stream.</p>
     <div id="notice"></div>
     <ul class="events" id="events"></ul>
+    <div id="evExtras"></div>
   </div>
 </section>
 
@@ -158,6 +164,9 @@ const CONFIG = {
   tagline: "Club volleyball, 2026\u201327 season",
   timezone: "America/Chicago",
 
+  // How many upcoming events show before the "show more" button.
+  visibleCount: 3,
+
   // Optional banner at the top for last-minute changes. Leave "" to hide it.
   announcement: "",
 
@@ -165,7 +174,7 @@ const CONFIG = {
   // Columns (row 1): name,start,end,city,venue,type,page,results,live
   //   start/end like 2026-12-12   type = Local or Travel
   //   page = link to that event's page   results = official scoring link   live = stream link
-  eventsCsvUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQzy7gqwkCqquh9XQ0FTJB4341FuWnkoQ2FtyDzRS24X7qEy0SOp3-unePR2AVwuIxAXo8aDi9R2Qz0/pub?gid=202820630&single=true&output=csv",
+  eventsCsvUrl: "YOUR_EVENTS_SHEET_CSV_URL_HERE",
 
   // Quick links. Put the real URL in each one. Leave as-is to show it greyed out.
   links: [
@@ -258,38 +267,66 @@ function btn(label, url, solid){
   const u = safeUrl(url);
   return u ? '<a class="btn' + (solid ? ' solid' : '') + '" href="' + esc(u) + '" target="_blank" rel="noopener">' + esc(label) + '</a>' : "";
 }
+function rowHtml(e){
+  const travel = /travel/i.test(e.type);
+  const where = [e.venue, e.city].filter(Boolean).join(", ");
+  return '<li class="ev">' +
+    '<div class="date">' + esc(rangeLabel(e.a, e.b)) + '<small>' + esc(dowLabel(e.a, e.b)) + '</small></div>' +
+    '<div><h3>' + esc(e.name) + '<span class="pill' + (travel ? ' travel' : '') + '">' + (travel ? 'Travel' : 'Local') + '</span></h3>' +
+    '<div class="where">' + esc(where) + '</div></div>' +
+    '<div class="btns">' + btn("Details", e.page, true) + btn("Scores", e.results) + btn("Live", e.live) + '</div></li>';
+}
+function toggleButton(label, openLabel, id){
+  return '<button class="more-btn" type="button" aria-expanded="false" aria-controls="' + id + '" ' +
+    'data-open="' + esc(openLabel) + '" data-closed="' + esc(label) + '" ' +
+    'onclick="toggleList(this,\'' + id + '\')">' + esc(label) + '</button>';
+}
+
 function render(events, isSample){
   const today = new Date(); today.setHours(0,0,0,0);
-  const up = events.map(e => ({...e, a: parseDate(e.start), b: parseDate(e.end) || parseDate(e.start)}))
-                   .filter(e => e.b >= today)
-                   .sort((x, y) => x.a - y.a);
+  const all = events.map(e => ({...e, a: parseDate(e.start), b: parseDate(e.end) || parseDate(e.start)}));
+  const up = all.filter(e => e.b >= today).sort((x, y) => x.a - y.a);
+  const past = all.filter(e => e.b < today).sort((x, y) => y.a - x.a);
 
   $("notice").innerHTML = isSample
     ? '<div class="notice">Showing sample events. Connect your events sheet in the settings to show the real schedule.</div>' : "";
 
-  if (!up.length){
-    $("events").innerHTML = '<li class="ev"><div></div><div><h3>No upcoming events posted yet</h3><div class="where">Check your team calendar invite.</div></div></li>';
-    $("next").innerHTML = '<h2>Next up</h2><p class="name">Nothing scheduled</p><p class="meta">Check your team calendar invite.</p>';
-    return;
+  const show = Math.max(1, CONFIG.visibleCount || 3);
+  const first = up.slice(0, show), rest = up.slice(show);
+
+  if (up.length){
+    const n = up[0];
+    const live = n.a <= today && n.b >= today;
+    $("next").innerHTML =
+      '<h2>' + (live ? 'This weekend' : 'Next up') + '</h2>' +
+      '<p class="name">' + esc(n.name) + '</p>' +
+      '<p class="meta">' + esc(rangeLabel(n.a, n.b)) + (n.city ? ' &middot; ' + esc(n.city) : '') + '</p>' +
+      '<div class="btns">' + btn("Event details", n.page, true) + btn("Live scores", n.results) + btn("Watch live", n.live) + '</div>';
+    $("events").innerHTML = first.map(rowHtml).join("");
+  } else {
+    $("events").innerHTML = '<li class="ev"><div></div><div><h3>No upcoming events posted yet</h3><div class="where">Check back soon or look for your team calendar invite.</div></div></li>';
+    $("next").innerHTML = '<h2>Next up</h2><p class="name">Nothing scheduled</p><p class="meta">Check back soon.</p>';
   }
 
-  const n = up[0];
-  const live = n.a <= today && n.b >= today;
-  $("next").innerHTML =
-    '<h2>' + (live ? 'This weekend' : 'Next up') + '</h2>' +
-    '<p class="name">' + esc(n.name) + '</p>' +
-    '<p class="meta">' + esc(rangeLabel(n.a, n.b)) + (n.city ? ' &middot; ' + esc(n.city) : '') + '</p>' +
-    '<div class="btns">' + btn("Event details", n.page, true) + btn("Live scores", n.results) + btn("Watch live", n.live) + '</div>';
+  let extras = "";
+  if (rest.length){
+    const word = rest.length + ' more upcoming event' + (rest.length > 1 ? 's' : '');
+    extras += '<ul class="events extra" id="moreEvents" hidden>' + rest.map(rowHtml).join("") + '</ul>' +
+              toggleButton('Show ' + word, 'Hide extra events', 'moreEvents');
+  }
+  if (past.length){
+    extras += '<div class="past-wrap"><ul class="events past" id="pastEvents" hidden>' + past.map(rowHtml).join("") + '</ul>' +
+              toggleButton('Past events (' + past.length + ')', 'Hide past events', 'pastEvents') + '</div>';
+  }
+  $("evExtras").innerHTML = extras;
+}
 
-  $("events").innerHTML = up.map(e => {
-    const travel = /travel/i.test(e.type);
-    const where = [e.venue, e.city].filter(Boolean).join(", ");
-    return '<li class="ev">' +
-      '<div class="date">' + esc(rangeLabel(e.a, e.b)) + '<small>' + esc(dowLabel(e.a, e.b)) + '</small></div>' +
-      '<div><h3>' + esc(e.name) + '<span class="pill' + (travel ? ' travel' : '') + '">' + (travel ? 'Travel' : 'Local') + '</span></h3>' +
-      '<div class="where">' + esc(where) + '</div></div>' +
-      '<div class="btns">' + btn("Details", e.page, true) + btn("Scores", e.results) + btn("Live", e.live) + '</div></li>';
-  }).join("");
+function toggleList(button, id){
+  const list = document.getElementById(id);
+  const open = list.hidden;           // hidden now means we are about to open it
+  list.hidden = !open;
+  button.setAttribute("aria-expanded", String(open));
+  button.textContent = open ? button.dataset.open : button.dataset.closed;
 }
 
 async function loadEvents(){
