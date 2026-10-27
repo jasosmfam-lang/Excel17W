@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Event | Excel 17W</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0f2447; --navy-deep:#091731; --red:#c8102e; --ink:#16213a;
+    --mist:#e9f0fc; --corn:#6495ed; --line:#d4dce8; --white:#fff;
+    --display:'Big Shoulders Display','Arial Narrow',Impact,sans-serif;
+    --body:'Figtree',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:var(--body);color:var(--ink);background:var(--white);line-height:1.55;font-size:17px}
+  a{color:inherit}
+  :focus-visible{outline:3px solid var(--red);outline-offset:3px}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+  .hero{position:relative;background:var(--navy);color:#fff;overflow:hidden;padding:26px 0 46px}
+  .hero::before{content:"";position:absolute;left:0;right:0;top:46%;height:3px;background:var(--corn);opacity:.75}
+  .hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:6px;background:var(--red)}
+  .hero .wrap{position:relative}
+  .back{display:inline-block;margin-bottom:22px;color:#cfdcf5;text-decoration:none;font-weight:600;font-size:.95rem}
+  .back:hover{color:#fff;text-decoration:underline}
+  .kind{display:inline-block;font-size:.78rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:3px 10px;border-radius:99px;background:var(--corn);color:var(--navy-deep);margin-bottom:12px}
+  .kind.travel{background:var(--red);color:#fff}
+  .hero h1{font-family:var(--display);font-weight:900;font-size:clamp(2.8rem,8vw,5.4rem);line-height:.92;margin:0 0 12px}
+  .hero .meta{margin:0 0 20px;font-size:1.12rem;color:#cfdcf5}
+  .btns{display:flex;flex-wrap:wrap;gap:8px}
+  .btn{display:inline-block;padding:9px 16px;font-weight:700;font-size:.92rem;text-decoration:none;border:2px solid var(--navy);color:var(--navy);background:transparent;border-radius:3px}
+  .btn:hover{background:var(--navy);color:#fff}
+  .hero .btn{border-color:#fff;color:#fff}
+  .hero .btn:hover{background:#fff;color:var(--navy)}
+  .hero .btn.solid{background:#fff;color:var(--navy)}
+  .hero .btn.solid:hover{background:var(--corn);border-color:var(--corn)}
+
+  section{padding:44px 0}
+  section.alt{background:var(--mist)}
+  section h2{font-family:var(--display);font-weight:900;font-size:2.2rem;margin:0 0 20px;color:var(--navy);line-height:1;padding-bottom:8px;border-bottom:4px solid var(--corn);display:inline-block}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+  .card{background:#fff;border:2px solid var(--navy);border-top:8px solid var(--corn);border-radius:3px;padding:16px 18px}
+  section.alt .card{background:#fff}
+  .card h3{margin:0 0 4px;font-family:var(--display);font-size:1.5rem;font-weight:800;line-height:1.05;color:var(--navy)}
+  .card .when{font-weight:700;color:var(--red);margin:0 0 4px}
+  .card .addr{margin:0 0 6px;font-size:.95rem}
+  .card .addr a{color:var(--navy);font-weight:600}
+  .card .note{margin:6px 0 12px;color:#3d4a66;font-size:.97rem;white-space:pre-line}
+  .linkbtns{display:flex;flex-wrap:wrap;gap:10px}
+  .linkbtns .btn{border-color:var(--navy)}
+  .linkbtns .btn.solid{background:var(--navy);color:#fff}
+  .linkbtns .btn.solid:hover{background:var(--red);border-color:var(--red)}
+  .msg{padding:40px 0;color:#4a5875}
+  .notice{background:#fff7e0;border:1px solid #ecd48a;padding:10px 14px;margin:20px 0;font-size:.92rem}
+  footer{background:var(--navy-deep);color:#9fb0cf;padding:26px 0;font-size:.9rem;border-top:6px solid var(--corn)}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <a class="back" href="index.html">&larr; All events</a>
+    <div id="head"><h1>Loading&hellip;</h1></div>
+  </div>
+</header>
+
+<main id="main"></main>
+
+<footer><div class="wrap" id="foot"></div></footer>
+
+<script>
+/* =====================================================================
+   SETTINGS: paste your two published CSV links here.
+   eventsCsvUrl  = the SAME link you used in index.html (your Events tab)
+   detailsCsvUrl = the published link for your Details tab
+   ===================================================================== */
+const CONFIG = {
+  eventsCsvUrl:  "https://docs.google.com/spreadsheets/d/e/2PACX-1vQzy7gqwkCqquh9XQ0FTJB4341FuWnkoQ2FtyDzRS24X7qEy0SOp3-unePR2AVwuIxAXo8aDi9R2Qz0/pub?gid=202820630&single=true&output=csv",
+  detailsCsvUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQzy7gqwkCqquh9XQ0FTJB4341FuWnkoQ2FtyDzRS24X7qEy0SOp3-unePR2AVwuIxAXo8aDi9R2Qz0/pub?gid=2017541255&single=true&output=csv",
+  footer: "Excel Volleyball \u00b7 Questions? Ask in the team group chat."
+};
+/* ===================================================================== */
+
+const isSet = v => v && !/^YOUR_/.test(v);
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const safeUrl = u => /^https?:\/\//i.test(u || "") ? u : "";
+const norm = s => String(s || "").trim().toLowerCase();
+$("foot").textContent = CONFIG.footer;
+
+const MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const DOW = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+function parseDate(s){
+  const m = /^(\d{4})-(\d{1,2})-(\d{1,2})/.exec((s || "").trim());
+  return m ? new Date(+m[1], +m[2]-1, +m[3]) : null;
+}
+function rangeLabel(a, b){
+  const day = d => DOW[d.getDay()] + ", " + MON[d.getMonth()] + " " + d.getDate();
+  if (!b || +a === +b) return day(a) + ", " + a.getFullYear();
+  if (a.getMonth() === b.getMonth()) return MON[a.getMonth()] + " " + a.getDate() + "\u2013" + b.getDate() + ", " + a.getFullYear();
+  return MON[a.getMonth()] + " " + a.getDate() + " \u2013 " + MON[b.getMonth()] + " " + b.getDate() + ", " + b.getFullYear();
+}
+
+function parseCsv(text){
+  const rows = []; let row = [], cur = "", q = false;
+  for (let i = 0; i < text.length; i++){
+    const c = text[i];
+    if (q){
+      if (c === '"' && text[i+1] === '"'){ cur += '"'; i++; }
+      else if (c === '"') q = false;
+      else cur += c;
+    } else if (c === '"') q = true;
+    else if (c === ","){ row.push(cur); cur = ""; }
+    else if (c === "\n" || c === "\r"){
+      if (c === "\r" && text[i+1] === "\n") i++;
+      row.push(cur); cur = "";
+      if (row.some(x => x.trim() !== "")) rows.push(row);
+      row = [];
+    } else cur += c;
+  }
+  row.push(cur);
+  if (row.some(x => x.trim() !== "")) rows.push(row);
+  return rows;
+}
+function toObjects(rows){
+  if (!rows.length) return [];
+  const head = rows[0].map(h => h.trim().toLowerCase());
+  return rows.slice(1).map(r => { const o = {}; head.forEach((h, i) => o[h] = (r[i] || "").trim()); return o; });
+}
+async function loadCsv(url){
+  const r = await fetch(url, { cache: "no-store" });
+  if (!r.ok) throw new Error(r.status);
+  return toObjects(parseCsv(await r.text()));
+}
+
+const SECTIONS = [
+  { key: "info",      title: "Good to know" },
+  { key: "hotel",     title: "Where we\u2019re staying" },
+  { key: "dinner",    title: "Team dinner" },
+  { key: "teambuild", title: "Team building" },
+  { key: "food",      title: "Places to eat" },
+  { key: "link",      title: "Links" }
+];
+const mapsUrl = addr => "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(addr);
+
+function card(d){
+  const link = safeUrl(d.link);
+  return '<div class="card"><h3>' + esc(d.title) + '</h3>' +
+    (d.when ? '<p class="when">' + esc(d.when) + '</p>' : '') +
+    (d.address ? '<p class="addr">' + esc(d.address) + ' &middot; <a href="' + esc(mapsUrl(d.address)) + '" target="_blank" rel="noopener">Directions</a></p>' : '') +
+    (d.note ? '<p class="note">' + esc(d.note) + '</p>' : '') +
+    (link ? '<div class="linkbtns"><a class="btn solid" href="' + esc(link) + '" target="_blank" rel="noopener">More info</a></div>' : '') +
+    '</div>';
+}
+
+function renderDetails(rows){
+  let html = "", n = 0;
+  SECTIONS.forEach(sec => {
+    const items = rows.filter(d => norm(d.section) === sec.key && d.title);
+    if (!items.length) return;
+    if (sec.key === "link"){
+      const btns = items.map(d => {
+        const u = safeUrl(d.link);
+        return u ? '<a class="btn solid" href="' + esc(u) + '" target="_blank" rel="noopener">' + esc(d.title) + '</a>' : "";
+      }).join("");
+      if (!btns) return;
+      html += '<section class="' + (n++ % 2 ? 'alt' : '') + '"><div class="wrap"><h2>' + sec.title + '</h2><div class="linkbtns">' + btns + '</div></div></section>';
+      return;
+    }
+    html += '<section class="' + (n++ % 2 ? 'alt' : '') + '"><div class="wrap"><h2>' + sec.title + '</h2><div class="cards">' +
+            items.map(card).join("") + '</div></div></section>';
+  });
+  $("main").innerHTML = html || '<div class="wrap"><p class="msg">More details for this event will be posted soon.</p></div>';
+}
+
+function btn(label, url, solid){
+  const u = safeUrl(url);
+  return u ? '<a class="btn' + (solid ? ' solid' : '') + '" href="' + esc(u) + '" target="_blank" rel="noopener">' + esc(label) + '</a>' : "";
+}
+
+async function init(){
+  const id = norm(new URLSearchParams(location.search).get("id"));
+  if (!id){ $("head").innerHTML = '<h1>Event not found</h1>'; $("main").innerHTML = '<div class="wrap"><p class="msg">Go back to <a href="index.html">all events</a> and tap an event.</p></div>'; return; }
+  if (!isSet(CONFIG.eventsCsvUrl)){ $("head").innerHTML = '<h1>Almost ready</h1>'; $("main").innerHTML = '<div class="wrap"><div class="notice">Add the events sheet link to the settings in event.html.</div></div>'; return; }
+
+  let ev;
+  try{
+    ev = (await loadCsv(CONFIG.eventsCsvUrl)).find(e => norm(e.id) === id);
+  } catch(err){
+    $("head").innerHTML = '<h1>Could not load</h1>';
+    $("main").innerHTML = '<div class="wrap"><div class="notice">This event could not load right now. Try again in a minute.</div></div>';
+    return;
+  }
+  if (!ev){ $("head").innerHTML = '<h1>Event not found</h1>'; $("main").innerHTML = '<div class="wrap"><p class="msg">We could not find that event. Go back to <a href="index.html">all events</a>.</p></div>'; return; }
+
+  const a = parseDate(ev.start), b = parseDate(ev.end) || a;
+  const travel = /travel/i.test(ev.type);
+  const where = [ev.venue, ev.city].filter(Boolean).join(", ");
+  document.title = ev.name + " | Excel 17W";
+  $("head").innerHTML =
+    '<span class="kind' + (travel ? ' travel' : '') + '">' + (travel ? 'Travel event' : 'Local event') + '</span>' +
+    '<h1>' + esc(ev.name) + '</h1>' +
+    '<p class="meta">' + (a ? esc(rangeLabel(a, b)) : '') + (where ? ' &middot; ' + esc(where) : '') + '</p>' +
+    '<div class="btns">' + btn("Live scores", ev.results, true) + btn("Watch live", ev.live) +
+    (where ? '<a class="btn" href="' + esc(mapsUrl(where)) + '" target="_blank" rel="noopener">Directions</a>' : '') + '</div>';
+
+  if (!isSet(CONFIG.detailsCsvUrl)){ $("main").innerHTML = '<div class="wrap"><div class="notice">Add the Details sheet link to the settings in event.html to show hotel, dinner, and other info.</div></div>'; return; }
+  try{
+    renderDetails((await loadCsv(CONFIG.detailsCsvUrl)).filter(d => norm(d.id) === id));
+  } catch(err){
+    $("main").innerHTML = '<div class="wrap"><div class="notice">The event details could not load right now. Try again in a minute.</div></div>';
+  }
+}
+init();
+</script>
+</body>
+</html>

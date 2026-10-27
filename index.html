@@ -140,14 +140,6 @@
     <div class="links" id="linkGrid"></div>
   </div>
 </section>
-
-<section id="contacts">
-  <div class="wrap">
-    <h2 class="sec">Who to ask</h2>
-    <p class="sub">Questions about schedules, travel, or the team? Start here.</p>
-    <div class="people" id="people"></div>
-  </div>
-</section>
 </main>
 
 <footer>
@@ -171,9 +163,10 @@ const CONFIG = {
   announcement: "",
 
   // Events sheet: File > Share > Publish to web > pick the Events tab > CSV
-  // Columns (row 1): name,start,end,city,venue,type,page,results,live
+  // Columns (row 1): name,start,end,city,venue,type,page,results,live,id
   //   start/end like 2026-12-12   type = Local or Travel
-  //   page = link to that event's page   results = official scoring link   live = stream link
+  //   id = short code for the event page, like kansascity (leave blank for no page)
+  //   page = (optional) a full link to use instead of the id   results = official scoring link   live = stream link
   eventsCsvUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQzy7gqwkCqquh9XQ0FTJB4341FuWnkoQ2FtyDzRS24X7qEy0SOp3-unePR2AVwuIxAXo8aDi9R2Qz0/pub?gid=202820630&single=true&output=csv",
 
   // Quick links. Put the real URL in each one. Leave as-is to show it greyed out.
@@ -185,13 +178,7 @@ const CONFIG = {
     { title: "Watch live",    note: "Stream for family who can\u2019t be there", url: "YOUR_LIVE_URL_HERE" }
   ],
 
-  // Contacts shown at the bottom. Add or remove rows as needed.
-  contacts: [
-    { name: "YOUR NAME", role: "Team manager", email: "you@example.com" },
-    { name: "Head coach", role: "Coach", email: "coach@example.com" }
-  ],
-
-  footer: "Excel Volleyball \u00b7 Questions? Email your team manager."
+  footer: "Excel Volleyball \u00b7 Questions? Ask in the team group chat."
 };
 /* ===================================================================== */
 
@@ -263,6 +250,11 @@ function sampleEvents(){
 }
 
 /* ---------- render events + next-up panel ---------- */
+function pageOf(e){
+  if (e.page) return e.page;
+  if (e.id) return new URL("event.html?id=" + encodeURIComponent(e.id), location.href).href;
+  return "";
+}
 function btn(label, url, solid){
   const u = safeUrl(url);
   return u ? '<a class="btn' + (solid ? ' solid' : '') + '" href="' + esc(u) + '" target="_blank" rel="noopener">' + esc(label) + '</a>' : "";
@@ -274,7 +266,7 @@ function rowHtml(e){
     '<div class="date">' + esc(rangeLabel(e.a, e.b)) + '<small>' + esc(dowLabel(e.a, e.b)) + '</small></div>' +
     '<div><h3>' + esc(e.name) + '<span class="pill' + (travel ? ' travel' : '') + '">' + (travel ? 'Travel' : 'Local') + '</span></h3>' +
     '<div class="where">' + esc(where) + '</div></div>' +
-    '<div class="btns">' + btn("Details", e.page, true) + btn("Scores", e.results) + btn("Live", e.live) + '</div></li>';
+    '<div class="btns">' + btn("Details", pageOf(e), true) + btn("Scores", e.results) + btn("Live", e.live) + '</div></li>';
 }
 function toggleButton(label, openLabel, id){
   return '<button class="more-btn" type="button" aria-expanded="false" aria-controls="' + id + '" ' +
@@ -301,7 +293,7 @@ function render(events, isSample){
       '<h2>' + (live ? 'This weekend' : 'Next up') + '</h2>' +
       '<p class="name">' + esc(n.name) + '</p>' +
       '<p class="meta">' + esc(rangeLabel(n.a, n.b)) + (n.city ? ' &middot; ' + esc(n.city) : '') + '</p>' +
-      '<div class="btns">' + btn("Event details", n.page, true) + btn("Live scores", n.results) + btn("Watch live", n.live) + '</div>';
+      '<div class="btns">' + btn("Event details", pageOf(n), true) + btn("Live scores", n.results) + btn("Watch live", n.live) + '</div>';
     $("events").innerHTML = first.map(rowHtml).join("");
   } else {
     $("events").innerHTML = '<li class="ev"><div></div><div><h3>No upcoming events posted yet</h3><div class="where">Check back soon or look for your team calendar invite.</div></div></li>';
@@ -349,11 +341,6 @@ $("linkGrid").innerHTML = CONFIG.links.map(l => {
     ? '<a class="link" href="' + esc(l.url) + '" target="_blank" rel="noopener"><strong>' + esc(l.title) + '</strong><span>' + esc(l.note) + '</span></a>'
     : '<div class="link off"><strong>' + esc(l.title) + '</strong><span>Coming soon</span></div>';
 }).join("");
-
-$("people").innerHTML = CONFIG.contacts.map(p =>
-  '<div class="person"><b>' + esc(p.name) + '</b><div class="role">' + esc(p.role) + '</div>' +
-  (p.email ? '<a href="mailto:' + esc(p.email) + '">' + esc(p.email) + '</a>' : '') + '</div>'
-).join("");
 
 loadEvents();
 </script>
