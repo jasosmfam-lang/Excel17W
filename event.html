@@ -153,7 +153,8 @@ const SECTIONS = [
   { key: "food",      title: "Places to eat" },
   { key: "link",      title: "Links" }
 ];
-const mapsUrl = addr => "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(addr);
+const isApple = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && /Mac/.test(navigator.platform));
+const mapsUrl = addr => (isApple ? "https://maps.apple.com/?q=" : "https://www.google.com/maps/search/?api=1&query=") + encodeURIComponent(addr);
 
 function card(d){
   const link = safeUrl(d.link);
